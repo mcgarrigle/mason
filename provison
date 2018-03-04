@@ -27,16 +27,16 @@ end
 
 def mac_boot(mac)
   mac = "01" + mac
-  mac.scan(/../).join("-")
+  mac.scan(/../).join("-").downcase
 end
 
 def bootfile(node)
   node = node.dup
-  fqdn = node["fqdn"]
   text = File.read("/var/lib/tftpboot/pxelinux/pxelinux.cfg/template")
   text = template(text, node)
-pp text
-  #File.write("/var/www/html/ks/#{fqdn}.ks", template(text, node))
+  mac = mac_boot(node["eth0.mac"])
+puts "mac #{mac}"
+  File.write("/var/lib/tftpboot/pxelinux/pxelinux.cfg/#{mac}", text)
 end
 
 def kickstart(node)
