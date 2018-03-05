@@ -34,8 +34,7 @@ def bootfile(node)
   node = node.dup
   text = File.read("/var/lib/tftpboot/pxelinux/pxelinux.cfg/template")
   text = template(text, node)
-  mac = mac_boot(node["eth0.mac"])
-puts "mac #{mac}"
+  mac  = mac_boot(node["eth0.mac"])
   File.write("/var/lib/tftpboot/pxelinux/pxelinux.cfg/#{mac}", text)
 end
 
@@ -53,12 +52,11 @@ end
 text = File.read(ARGV[0])
 json = JSON.parse(text)
 node = flatten(json)
-
 pp node
+exit
 
 bootfile(node)
 kickstart(node)
 
 pp node
-# "/var/lib/tftpboot/pxelinux/pxelinux.cfg/01-08-00-27-d5-5c-ec"
-#
+
