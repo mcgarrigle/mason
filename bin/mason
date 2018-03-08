@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+# kickstart HTTP server
+
+# access from NAT interface on VM via:
+#  http://10.0.3.2/ipa.ks
+
+require "webrick"
+
+server = WEBrick::HTTPServer.new(:Port => 80, :DocumentRoot => "ks")
+
+trap('INT') { server.shutdown } 
+
+server.start
+
