@@ -1,7 +1,7 @@
 
 module Whiskers
 
-  def flatten(hash)
+  def self.flatten(hash)
     node = {}
     hash.each do |k,v|
       if v.is_a?(Hash)
