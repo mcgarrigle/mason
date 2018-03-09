@@ -8,13 +8,13 @@ cp dnsmasq.conf /etc/dnsmasq.conf
 
 mkdir -p /var/lib/tftpboot/pxelinux.cfg
 
+cp configuration/{default,template} /var/lib/tftpboot/pxelinux.cfg
+
 cp /usr/share/syslinux/pxelinux.0 /var/lib/tftpboot
 cp /usr/share/syslinux/menu.c32   /var/lib/tftpboot
 cp /usr/share/syslinux/memdisk    /var/lib/tftpboot
 cp /usr/share/syslinux/mboot.c32  /var/lib/tftpboot
 cp /usr/share/syslinux/chain.c32  /var/lib/tftpboot
-
-cp {default,template} /var/lib/tftpboot/pxelinux.cfg
 
 mount -o loop centos-gold-7.4.1708.iso /mnt/
 
@@ -23,14 +23,14 @@ cp /mnt/images/pxeboot/* /var/lib/tftpboot/centos/x86_64/7.4
 cp -r /mnt /var/www/html/centos-7.4
 
 mkdir -p /var/www/html/ks
-cp {default.ks,template.ks} /var/www/html/ks
+cp configuration/{default.ks,template.ks} /var/www/html/ks
 
 restorecon -r /var/lib/tftpboot /var/www/html
 
 # -------------------------------------------------------
 
-systemctl disable firewalld
 systemctl stop firewalld
+systemctl disable firewalld
 
 systemctl start dnsmasq
 systemctl enable dnsmasq
