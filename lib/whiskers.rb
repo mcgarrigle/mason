@@ -1,21 +1,20 @@
 
 module Whiskers
 
-  def self.flatten(hash)
+  def self.flatten(hash, root = "")
     node = {}
     hash.each do |k,v|
       if v.is_a?(Hash)
-        v.each do |j,v|
-          node["#{k}.#{j}"] = v
-        end
+        child = flatten(v, "#{root}#{k}.")
+        node.merge!(child)
       else
-        node[k] = v
+        node["#{root}#{k}"] = v
       end
     end
     return node
   end
 
-  def template(text, args)
+  def self.template(text, args)
     text.gsub(/{{.*?}}/) {|v| v.gsub!(/[{}]/,""); args[v] }
   end
 
