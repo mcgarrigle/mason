@@ -15,7 +15,8 @@ module Whiskers
   end
 
   def self.template(text, args)
-    text.gsub(/{{.*?}}/) {|v| v.gsub!(/[{}]/,""); args[v] }
+    vars = flatten(args)
+    text.gsub(/{{.*?}}/) {|v| v.gsub!(/[{}]/,""); vars[v] }
   end
 
 end

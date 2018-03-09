@@ -23,7 +23,19 @@ describe Whiskers do
 
     it "should enumerate a tree" do
       example = {'foo' => {'bar' => {'baz' => 100 }, 'bob' => 200 }, 'rat' => {'pig' => 300 } }
-      expect(Whiskers.flatten(example)).to eql({"foo.bar.baz"=>100, "foo.bob"=>200, "rat.pig"=>300})
+      expect(Whiskers.flatten(example)).to eql ({"foo.bar.baz"=>100, "foo.bob"=>200, "rat.pig"=>300})
+    end
+
+  end
+
+  describe "#template" do
+
+    it "should replace any {{pattern}}" do
+      expect(Whiskers.template("begin {{bar}} end", {"bar" => "foo"})).to eql("begin foo end")
+    end
+
+    it "should replace any {{nested.pattern}}" do
+      expect(Whiskers.template("begin {{foo.bar}} end", {"foo" => {"bar" => "baz"}})).to eql("begin baz end")
     end
 
   end
