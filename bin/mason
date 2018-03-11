@@ -7,9 +7,23 @@
 
 require "webrick"
 
-server = WEBrick::HTTPServer.new(:Port => 80, :DocumentRoot => "ks")
+class WEBrick::HTTPServlet::ProcHandler
+  alias do_PUT    do_GET
+  alias do_DELETE do_GET
+end
+
+server = WEBrick::HTTPServer.new(:Port => 9090)
 
 trap('INT') { server.shutdown } 
+
+server.mount_proc '/test' do |req, res|
+  res.body = res.inspect
+end
+
+server.mount_proc '/node/' do |req, res|
+  p req.path
+  res.body = "{ 'fqdn': 'server' }"
+end
 
 server.start
 

@@ -2,7 +2,7 @@
 
 yum install -y epel-release
 yum install -y vim git ruby wget uind-utils yum tree
-yum install -y dnsmasq syslinux httpd
+yum install -y dnsmasq syslinux httpd redis
 
 cp dnsmasq.conf /etc/dnsmasq.conf
 
@@ -37,6 +37,10 @@ systemctl enable dnsmasq
 
 systemctl start httpd
 systemctl enable httpd
+
+# -------------------------------------------------------
+
+gem install redis -v 3.3.5
 
 # -------------------------------------------------------
 # end
