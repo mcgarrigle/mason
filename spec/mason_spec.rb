@@ -3,7 +3,7 @@ require 'mason'
 
 require 'json_helper'
 
-include JsonHelper
+#include JsonHelper
 
 
 describe Mason do

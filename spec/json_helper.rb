@@ -7,3 +7,6 @@ module JsonHelper
     JSON.parse(text)
   end
 end
+
+include JsonHelper
+
