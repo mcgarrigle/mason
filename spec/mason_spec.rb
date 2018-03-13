@@ -3,8 +3,6 @@ require 'mason'
 
 require 'json_helper'
 
-#include JsonHelper
-
 
 describe Mason do
 
@@ -19,8 +17,13 @@ describe Mason do
       expect { subject.set(server) }.to raise_error(ArgumentError);
     end
 
+    it "should ensure :fqdn is String" do
+      server['fqdn'] = 1
+      expect { subject.set(server) }.to raise_error(ArgumentError);
+    end
+
     it "should error on incorrect :fqdn" do
-      server['fqdn'] = 's1%2'
+      server['fqdn'] = 's1%2.foo.local'
       expect { subject.set(server) }.to raise_error(ArgumentError);
     end
 

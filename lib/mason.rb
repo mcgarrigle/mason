@@ -1,8 +1,8 @@
 
 class Mason
 
-  def _required(field)
-    raise ArgumentError, "missing #{field}" unless @node[field]
+  def _required(field, klass)
+    raise ArgumentError, "missing #{field}" unless klass === @node[field]
   end
 
   def _matches(field, regex)
@@ -13,7 +13,7 @@ class Mason
 
   def set(node)
     @node = node
-    _required('fqdn')
+    _required('fqdn', String)
     _matches('fqdn', /^[\-\.a-z0-9]+$/)
   end
 
