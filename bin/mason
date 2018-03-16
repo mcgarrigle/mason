@@ -1,29 +1,23 @@
 #!/usr/bin/env ruby
 
-# kickstart HTTP server
+$LIB_DIR = File.join(File.dirname(__FILE__), "..", "lib")
+$LOAD_PATH << $LIB_DIR
 
-# access from NAT interface on VM via:
-#  http://10.0.3.2/ipa.ks
+require 'sinatra'
+require 'mason'
 
-require "webrick"
+set :port, 9090
 
-class WEBrick::HTTPServlet::ProcHandler
-  alias do_PUT    do_GET
-  alias do_DELETE do_GET
+# ---------------------------------------------
+
+get '/node/:fqdn' do |fqdn|
+  puts fqdn
 end
 
-server = WEBrick::HTTPServer.new(:Port => 9090)
-
-trap('INT') { server.shutdown } 
-
-server.mount_proc '/test' do |req, res|
-  res.body = res.inspect
+put '/node/:fqdn' do |fqdn|
+  puts fqdn
+  puts request.body.read
 end
 
-server.mount_proc '/node/' do |req, res|
-  p req.path
-  res.body = "{ 'fqdn': 'server' }"
-end
-
-server.start
-
+# ---------------------------------------------
+# end
