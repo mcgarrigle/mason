@@ -1,6 +1,7 @@
 
 require 'redis'
 require 'json'
+require 'pp'
 
 class Mason
 
@@ -26,9 +27,12 @@ class Mason
   end
 
   def get(fqdn)
+    JSON.parse(get_json(fqdn))
+  end
+
+  def get_json(fqdn)
     key  = "node/#{fqdn}"
-    text = @redis.get(key)
-    JSON.parse(text)
+    @redis.get(key)
   end
 
   def del(fqdn)

@@ -4,19 +4,27 @@ $LIB_DIR = File.join(File.dirname(__FILE__), "..", "lib")
 $LOAD_PATH << $LIB_DIR
 
 require 'sinatra'
+require 'json'
 require 'mason'
 
 set :port, 9090
 
+helpers do
+
+  def mason
+    @mason ||= Mason.new
+  end
+
+end
+
 # ---------------------------------------------
 
 get '/node/:fqdn' do |fqdn|
-  puts fqdn
+  mason.get_json(fqdn)
 end
 
 put '/node/:fqdn' do |fqdn|
-  puts fqdn
-  puts request.body.read
+  mason.set(JSON.parse(request.body.read))
 end
 
 # ---------------------------------------------

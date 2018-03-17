@@ -6,12 +6,15 @@ CONF_DIR = File.join(File.dirname(__FILE__), "..", "configuration")
 BOOT_TEMPLATE      = File.join(CONF_DIR, "template")
 KICKSTART_TEMPLATE = File.join(CONF_DIR, "template.ks")
 
+require 'socket'
 require 'whiskers'
 
 class Provisioner
 
   def initialize(node)
+    @listening = Socket.ip_address_list[1].ip_address
     @node = node
+    @node["mason.listening"] = @listening
   end
 
   def mac_address(mac)
