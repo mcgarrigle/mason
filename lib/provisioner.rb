@@ -1,6 +1,12 @@
 
-TFTPBOOT = "/var/lib/tftpboot/pxelinux/pxelinux.cfg"
-WWWROOT  = "/var/www/html/ks"
+TFTP_DIR = "/var/lib/tftpboot/pxelinux.cfg"
+WWW_DIR  = "/var/www/html/ks"
+
+CONF_DIR = File.join(File.dirname(__FILE__), "..", "configuration")
+BOOT_TEMPLATE      = File.join(CONF_DIR, "template")
+KICKSTART_TEMPLATE = File.join(CONF_DIR, "template.ks")
+
+require 'whiskers'
 
 class Provisioner
 
@@ -18,20 +24,22 @@ class Provisioner
   end
 
   def bootfile
-    temp = File.read("#{TFTPBOOT}/template")
+    mac  = mac_boot(@node["interfaces"][0]["mac"])
+    temp = File.read(BOOT_TEMPLATE)
     text = Whiskers.template(temp, @node)
-    mac  = mac_boot(node["interfaces.0.mac"])
-    File.write("#{TFTPBOOT}/#{mac}", text)
+    path = File.join(TFTP_DIR, mac)
+    File.write(path, text)
   end
 
   def kickstart
-    node = node.dup
+    node = @node.dup
     fqdn = node["fqdn"]
-    node["interfaces"].values.each do |v|
-      v = mac_address(v)
+    node["interfaces"].each do |v|
+      v["mac"] = mac_address(v["mac"])
     end
-    text = File.read("/var/www/html/ks/template.ks")
-    File.write("/var/www/html/ks/#{fqdn}.ks", template(text, node))
+    temp = File.read(KICKSTART_TEMPLATE)
+    path = File.join(WWW_DIR, "#{fqdn}.ks")
+    File.write(path, Whiskers.template(temp, node))
   end
 
   def provision

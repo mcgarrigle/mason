@@ -8,8 +8,8 @@ keyboard uk
 skipx
 
 network --hostname={{fqdn}}
-network --device={{eth0.mac}} --noipv6 --bootproto=static --ip={{eth0.ip}} --netmask={{eth0.netmask}}
-network --device={{eth1.mac}} --noipv6 --bootproto=static --ip={{eth1.ip}} --netmask={{eth1.netmask}} --gateway={{eth1.gateway}} --nameserver={{nameserver}}
+network --device={{interfaces.0.mac}} --noipv6 --bootproto=static --ip={{interfaces.0.ip}} --netmask={{interfaces.0.netmask}}
+network --device={{interfaces.1.mac}} --noipv6 --bootproto=static --ip={{interfaces.1.ip}} --netmask={{interfaces.1.netmask}} --gateway={{interfaces.1.gateway}} --nameserver={{nameserver}}
 
 authconfig --useshadow --passalgo=sha256 --kickstart
 
@@ -52,6 +52,6 @@ git
 
 %post --log=/root/kickstart-post.log
   echo "UseDNS no" >> /etc/ssh/sshd_config
-  echo "{{eth0.ip}} {{fqdn}}" >> /etc/hosts
+  echo "{{interfaces.1.ip}} {{fqdn}}" >> /etc/hosts
   echo "rescue ALL=(root) ALL" >> /etc/sudoers.d/rescue
 %end
