@@ -38,7 +38,4 @@ class Mason
   def del(fqdn)
   end
 
-  def provision(fqdn)
-  end
-
 end
