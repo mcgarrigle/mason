@@ -1,11 +1,11 @@
 
-require 'mason' 
+require 'node' 
 require 'json_helper'
 
 
-describe Mason do
+describe Node do
 
-  subject { Mason.new }
+  subject { Node.new }
 
   before :each do
     @mock_redis = double(:set => "OK", :get => '{ "fqdn": "X" }')

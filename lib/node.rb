@@ -3,7 +3,7 @@ require 'redis'
 require 'json'
 require 'pp'
 
-class Mason
+class Node
 
   def initialize
     @redis = Redis.new

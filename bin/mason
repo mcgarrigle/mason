@@ -5,14 +5,14 @@ $LOAD_PATH << $LIB_DIR
 
 require 'sinatra'
 require 'json'
-require 'mason'
+require 'node'
 
 set :port, 9090
 
 helpers do
 
-  def mason
-    @mason ||= Mason.new
+  def node
+    @node ||= Node.new
   end
 
 end
@@ -20,11 +20,11 @@ end
 # ---------------------------------------------
 
 get '/node/:fqdn' do |fqdn|
-  mason.get_json(fqdn)
+  node.get_json(fqdn)
 end
 
 put '/node/:fqdn' do |fqdn|
-  mason.set(JSON.parse(request.body.read))
+  node.set(JSON.parse(request.body.read))
 end
 
 # ---------------------------------------------
