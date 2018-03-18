@@ -1,5 +1,5 @@
 
-url --url http://{{mason.listening}}/centos-7.4
+url --url http://{{mason.address}}/centos-7.4
 
 install 
 

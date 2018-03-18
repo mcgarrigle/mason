@@ -5,9 +5,16 @@ $LOAD_PATH << $LIB_DIR
 
 require 'sinatra'
 require 'json'
+require 'mason'
 require 'node'
+require 'provisioner'
 
-set :port, 9090
+Mason.configure do |config|
+  # put config overrides here
+end
+
+set :bind, '0.0.0.0'
+set :port, Mason.config.port
 
 helpers do
 
@@ -24,7 +31,14 @@ get '/node/:fqdn' do |fqdn|
 end
 
 put '/node/:fqdn' do |fqdn|
-  node.set(JSON.parse(request.body.read))
+  server = JSON.parse(request.body.read)
+  node.set(server)
+  Provisioner.bootfile(server)
+end
+
+get '/ks/:fqdn' do |fqdn|
+  server = node.get(fqdn)
+  Provisioner.kickstart(server)
 end
 
 # ---------------------------------------------
