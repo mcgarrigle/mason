@@ -31,7 +31,10 @@ class Provisioner
     mac.downcase.scan(/../).join("-")
   end
 
-  def self.bootfile(node)
+  # target = install or localdisk
+
+  def self.bootfile(node, boot = "install")
+    node["mason.boot"] = boot
     node["mason.address"] = Mason.config.address
     node["mason.url"]     = Mason.config.url
     mac  = mac_boot(node["interfaces"][0]["mac"])

@@ -1,7 +1,7 @@
 DEFAULT menu.c32
 PROMPT 0
 TIMEOUT 10
-ONTIMEOUT {{mason.boot}}
+ONTIMEOUT localdisk
 MENU TITLE PXE Network Boot
 
 LABEL localdisk

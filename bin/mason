@@ -37,11 +37,12 @@ end
 put '/node/:fqdn' do |fqdn|
   server = JSON.parse(request.body.read)
   node.set(server)
-  Provisioner.bootfile(server)
+  Provisioner.bootfile(server, "install")
 end
 
 get '/ks/:fqdn' do |fqdn|
   server = node.get(fqdn)
+  Provisioner.bootfile(server, "localdisk")
   Provisioner.kickstart(server)
 end
 
