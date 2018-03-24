@@ -3,6 +3,10 @@ require 'socket'
 
 module Mason
 
+  def self.version
+    "0.0.1"
+  end
+
   class << self
     attr_accessor :config
   end

@@ -26,6 +26,10 @@ end
 
 # ---------------------------------------------
 
+get '/version' do
+  {:version => Mason.version}.to_json
+end
+
 get '/node/:fqdn' do |fqdn|
   node.get_json(fqdn)
 end
