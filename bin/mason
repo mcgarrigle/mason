@@ -9,9 +9,19 @@ require 'mason'
 require 'node'
 require 'provisioner'
 
+configure do
+  # logging is enabled by default in classic style applications,
+  # so `enable :logging` is not needed
+  file = File.new("log/mason.log", 'a+')
+  file.sync = true
+  use Rack::CommonLogger, file
+end
+
 Mason.configure do |config|
   # put config overrides here
 end
+
+use Rack::Logger
 
 set :bind, '0.0.0.0'
 set :port, Mason.config.port
@@ -20,6 +30,10 @@ helpers do
 
   def node
     @node ||= Node.new
+  end
+
+  def logger
+    request.logger
   end
 
 end
