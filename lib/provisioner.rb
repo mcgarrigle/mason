@@ -6,6 +6,7 @@
 # BOOT_TEMPLATE      = File.join(CONF_DIR, "template")
 # KICKSTART_TEMPLATE = File.join(CONF_DIR, "template.ks")
 
+require 'hosts'
 require 'mason'
 require 'whiskers'
 
@@ -19,8 +20,8 @@ class Provisioner
     node["mason.address"] = Mason.config.address
     node["mason.url"]     = Mason.config.url
     fqdn = node["fqdn"]
-    node["interfaces"].each do |v|
-      v["mac"] = mac_address(v["mac"])
+    node["interfaces"].each do |interface|
+      interface["mac"] = mac_address(interface["mac"])
     end
     template = File.read(Mason.config.kickstart_template)
     Whiskers.template(template, node)
@@ -42,6 +43,18 @@ class Provisioner
     text = Whiskers.template(temp, node)
     path = File.join(Mason.config.tftp_dir, mac)
     File.write(path, text)
+  end
+
+  def self.dns(node)
+    fqdn = node["fqdn"]
+    hosts = Hosts::File.read("/etc/hosts")
+    hosts.elements.delete_if {|h| h.name == fqdn }
+    node["interfaces"].each do |interface|
+      element = Hosts::Entry.new(interface["ip"], fqdn)
+      hosts.elements << element
+    end
+    hosts.write
+    system "systemctl reload dnsmasq"
   end
 
 end

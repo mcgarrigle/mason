@@ -49,6 +49,7 @@ end
 post '/node' do
   server = JSON.parse(request.body.read)
   node.set(server)
+  Provisioner.dns(server)
   Provisioner.bootfile(server, "install")
   logger.info "created #{server["fqdn"]}"
   redirect to "/node/#{server["fqdn"]}"
@@ -57,6 +58,7 @@ end
 put '/node/:fqdn' do |fqdn|
   server = JSON.parse(request.body.read)
   node.set(server)
+  Provisioner.dns(server)
   Provisioner.bootfile(server, "install")
 end
 

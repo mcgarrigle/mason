@@ -8,5 +8,6 @@ source "https://rubygems.org"
 
 gem "rspec"
 gem "netaddr"
+gem "hosts"
 gem "redis"
 gem "sinatra"
