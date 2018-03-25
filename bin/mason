@@ -21,9 +21,7 @@ Mason.configure do |config|
   # put config overrides here
 end
 
-use Rack::Logger
-
-set :bind, '0.0.0.0'
+set :bind, Mason.config.bind
 set :port, Mason.config.port
 
 helpers do
@@ -46,6 +44,14 @@ end
 
 get '/node/:fqdn' do |fqdn|
   node.get_json(fqdn)
+end
+
+post '/node' do
+  server = JSON.parse(request.body.read)
+  node.set(server)
+  Provisioner.bootfile(server, "install")
+  logger.info "created #{server["fqdn"]}"
+  redirect to "/node/#{server["fqdn"]}"
 end
 
 put '/node/:fqdn' do |fqdn|

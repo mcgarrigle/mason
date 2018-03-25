@@ -5,11 +5,6 @@ ONTIMEOUT localdisk
 MENU TITLE PXE Network Boot
 
 LABEL localdisk
-    MENU LABEL ^Local Hard Drive
+    MENU LABEL ^Default local boot
     MENU DEFAULT
     LOCALBOOT 0
-
-LABEL install_64bit
-    MENU LABEL ^CentOS 7.4 (64-bit) Install
-    KERNEL centos/x86_64/7.4/vmlinuz
-    APPEND ks=http://10.0.30.10/ks/default.ks initrd=centos/x86_64/7.4/initrd.img ramdisk_size=100000

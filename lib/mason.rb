@@ -19,7 +19,7 @@ module Mason
   class Configuration
     attr_accessor :tftp_dir, :www_dir, :conf_dir
     attr_accessor :boot_template, :kickstart_template
-    attr_accessor :address, :port, :url
+    attr_accessor :address, :bind, :port, :url
 
     def initialize
       @tftp_dir = "/var/lib/tftpboot/pxelinux.cfg"
@@ -30,6 +30,7 @@ module Mason
       @kickstart_template = File.join(@conf_dir, "template.ks")
 
       @address = Socket.ip_address_list[1].ip_address
+      @bind    = "0.0.0.0"
       @port    = 9090
       @url     = "http://#{@address}:#{port}"
     end
