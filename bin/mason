@@ -49,8 +49,9 @@ end
 post '/node' do
   server = JSON.parse(request.body.read)
   node.set(server)
-  Provisioner.dns(server)
-  Provisioner.bootfile(server, "install")
+  provisioner = Provisioner.new(server)
+  provisioner.dns
+  provisioner.bootfile("install")
   logger.info "created #{server["fqdn"]}"
   redirect to "/node/#{server["fqdn"]}"
 end
@@ -58,14 +59,16 @@ end
 put '/node/:fqdn' do |fqdn|
   server = JSON.parse(request.body.read)
   node.set(server)
-  Provisioner.dns(server)
-  Provisioner.bootfile(server, "install")
+  provisioner = Provisioner.new(server)
+  provisioner.dns
+  provisioner.bootfile("install")
 end
 
 get '/ks/:fqdn' do |fqdn|
   server = node.get(fqdn)
-  Provisioner.bootfile(server, "localdisk")
-  Provisioner.kickstart(server)
+  provisioner = Provisioner.new(server)
+  provisioner.bootfile("localdisk")
+  provisioner.kickstart
 end
 
 # ---------------------------------------------
