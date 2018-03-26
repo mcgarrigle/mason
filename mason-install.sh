@@ -4,7 +4,7 @@ yum install -y epel-release
 yum install -y vim git ruby wget uind-utils yum tree
 yum install -y dnsmasq syslinux httpd redis
 
-cp dnsmasq.conf /etc/dnsmasq.conf
+cp configuration/dnsmasq.conf /etc/dnsmasq.conf
 
 mkdir -p /var/lib/tftpboot/pxelinux.cfg
 
@@ -20,7 +20,9 @@ mount -o loop centos-gold-7.4.1708.iso /mnt/
 
 mkdir -p /var/lib/tftpboot/centos/x86_64/7.4
 cp /mnt/images/pxeboot/* /var/lib/tftpboot/centos/x86_64/7.4
-cp -r /mnt /var/www/html/centos-7.4
+
+mkdir -p /var/www/html/centos
+cp -r /mnt/ /var/www/html/centos/7.4/
 
 mkdir -p /var/www/html/ks
 cp configuration/{default.ks,template.ks} /var/www/html/ks
@@ -38,9 +40,16 @@ systemctl enable dnsmasq
 systemctl start httpd
 systemctl enable httpd
 
+systemctl start redis
+systemctl enable redis
+
+systemctl stop firewalld
+systemctl disable firewalld
+
 # -------------------------------------------------------
 
-gem install redis -v 3.3.5
+gem install bundler
+bundle install
 
 # -------------------------------------------------------
 # end
