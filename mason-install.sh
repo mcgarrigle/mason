@@ -16,7 +16,7 @@ cp /usr/share/syslinux/memdisk    /var/lib/tftpboot
 cp /usr/share/syslinux/mboot.c32  /var/lib/tftpboot
 cp /usr/share/syslinux/chain.c32  /var/lib/tftpboot
 
-mount -o loop centos-gold-7.4.1708.iso /mnt/
+mount -o loop *.iso /mnt/
 
 mkdir -p /var/lib/tftpboot/centos/x86_64/7.4
 cp /mnt/images/pxeboot/* /var/lib/tftpboot/centos/x86_64/7.4
@@ -24,10 +24,14 @@ cp /mnt/images/pxeboot/* /var/lib/tftpboot/centos/x86_64/7.4
 mkdir -p /var/www/html/centos
 cp -r /mnt/ /var/www/html/centos/7.4/
 
-mkdir -p /var/www/html/ks
-cp configuration/{default.ks,template.ks} /var/www/html/ks
-
 restorecon -r /var/lib/tftpboot /var/www/html
+
+cp configuration/mason.service /lib/systemd/system
+
+# -------------------------------------------------------
+
+gem install bundler
+bundle install
 
 # -------------------------------------------------------
 
@@ -43,13 +47,11 @@ systemctl enable httpd
 systemctl start redis
 systemctl enable redis
 
+systemctl start mason
+systemctl enable mason
+
 systemctl stop firewalld
 systemctl disable firewalld
-
-# -------------------------------------------------------
-
-gem install bundler
-bundle install
 
 # -------------------------------------------------------
 # end
