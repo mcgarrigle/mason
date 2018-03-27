@@ -9,3 +9,6 @@ Group=root
 WorkingDirectory=/root/mason
 Restart=always
 ExecStart=/usr/bin/ruby bin/mason
+
+[Install]
+WantedBy=multi-user.target
