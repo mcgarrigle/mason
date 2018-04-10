@@ -13,7 +13,7 @@ Typical Deployment Scenario
                             { intertubes } 10.0.40.1
                                    |
              10.0.40.2             |
-  |----------+-------------+-------+------+-------|  10.0.40.0/24 (vbox natnetwork)
+  |----------+-------------+-------+------+---------| 10.0.40.0/24 (vbox natnetwork)
              |             |              |
       enp0s8 |             |              |
       +------+----+  +-----+-----+  +-----+------+
@@ -21,7 +21,7 @@ Typical Deployment Scenario
       +------+----+  +-----+-----+  +-----+------+
       enp0s3 |             |              |
              |             |              |
-  |-----+----+-------------+--------------+---------|  10.0.30.0/24 (vbox hostonly)
+  |-----+----+-------------+--------------+---------| 10.0.30.0/24 (vbox hostonly)
         |    10.0.30.2
         |
    +----+---------+
@@ -54,8 +54,9 @@ Installation Instructions
 What is installed
 -----------------
 * DNSMASQ for TFTP and DNS
-* TFTP boot environemnt is configured
-* Apache HTTPD installed and the ISO unpacked for net boot
+* Apache HTTPD installed
+* TFTP boot environment is configured
+* The ISO unpacked for net boot and a local CentOS repo created
 * Redis is installed as a backing store for Mason
 * Dependent gems are installed
 * Mason is started as a service on port 9090
@@ -79,15 +80,38 @@ Node structure
 | Name       | Description                                                        |
 |------------|--------------------------------------------------------------------|
 | fqdn       | Fully qualified domain name of the node - this will be this node ID|
-```
+| nameserver | The default nameserver for this node                               |
+| interfaces | Array of interface definitions                                     |
+| * mac      | MAC address of the interface note: no '-' or ':'                   |
+| * ip       | IP (v4 currently) of the interface                                 |
+| * netmask  | For IPv4                                                           |
+| * gateway  | Next hop for this interface - default route if it is the only one  |
+
+```http
 GET /version
 ```
-returns version
+Returns version.
 
 ```
 {"version":"0.0.1"}
 ```
-POST /node
 
+```http
+POST /node  <= {node}
+```
+Redirects to /node/{fqdn} on success.
 
+```http
+PUT /node  <= {node}
+```
+Updates node.
 
+```http
+GET /node/{fqdn}
+```
+Returns node structure.
+
+```http
+GET /ks/{fqdn}
+```
+Returns kickstart file compiled for the node.
